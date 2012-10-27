@@ -1,0 +1,5 @@
+EDITFILES=0
+TMPDIR="/home/resi/abs/yaourt/"
+DEVELBUILDDIR="/home/resi/abs/yaourt/"
+EXPORTDIR="/home/resi/abs/yaourt/"
+#SHOWORPHANS=0
