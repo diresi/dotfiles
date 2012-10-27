@@ -1,0 +1,45 @@
+bindkey "" backward-kill-word
+bindkey "[1;3C" forward-word
+bindkey "[1;3D" backward-word
+bindkey "[1;5C" forward-word
+bindkey "[1;5D" backward-word
+bindkey "Oc" forward-word
+bindkey "Od" backward-word
+
+alias py='python'
+alias mq='hg -R $(hg root)/.hg/patches'
+alias hgshow='echo hg pull -r `hg id -i` `hg root`'
+alias hgpatch='hg import --no-commit'
+alias glog='hg glog --color always | less "+/changeset:.*"`hg id -q`'
+
+
+CCACHE=/usr/lib/ccache/bin/
+MYPATH=~/opt/bin
+OTHERPATHS=/opt/android-sdk/platform-tools/
+export PATH=$CCACHE:$MYPATH:$PATH:$OTHERPATHS
+export LESS="-MSR -m"
+export ACK_OPTIONS="--color --group"
+
+#/usr/bin/keychain -Q -q --nogui --noask ~/.ssh/id_rsa
+#[[ -f $HOME/.keychain/$HOST-sh ]] && source $HOME/.keychain/$HOST-sh
+#[[ -f $HOME/opt/bin/gpg-agent.sh ]] && source $HOME/opt/bin/gpg-agent.sh
+
+eval `keychain --eval --quiet`
+alias enc='gpg -sear resi '
+alias dec='gpg '
+
+# override ls aliases without -F (classify)
+# do we have GNU ls with color-support?
+alias ls='ls -b -C --color=auto'
+alias l='ls -l --color=auto'
+
+# venvwrapper
+#export WORKON_HOME=$HOME/venv
+#source /usr/bin/virtualenvwrapper.sh
+
+export PYTHONSTARTUP=$HOME/opt/bin/py_startup.py
+# pyjs path
+PYJSPATH=$HOME/data/src/pyjs/pyjamas-0.7/bin/
+export PATH=$PATH:$PYJSPATH
+
+#source $HOME/.zshrc.startx
