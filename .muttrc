@@ -1,13 +1,24 @@
+set realname="Christoph Rissner"
+set from=resi@rissner.net
+set sendmail="/usr/bin/msmtp"
+
 set nm_default_uri="notmuch:///home/resi/IMAP/"
 set virtual_spoolfile	= yes
+set nm_db_limit=500
 
 # normal folders
 set mbox_type=Maildir
 set folder="~/IMAP/"
+set record="~/IMAP/rissner/Sent/"
+set postponed="~/IMAP/rissner/Drafts/"
 
-source .mutt/colors.linux
-source .mutt/mailboxes
-source .mutt/sort-threads.rc
+source ~/.mutt/mailboxes
+source ~/.mutt/sort-threads.rc
+#source ~/.mutt/colors.linux
+source ~/.mutt/colors.resi
+source ~/.mutt/crypto
+source ~/.mutt/alias
+set alias_file=~/.mutt/alias
 
 # sidebar
 set sidebar_width	= 35
@@ -17,41 +28,28 @@ bind index <left> sidebar-prev
 bind index <right> sidebar-next
 bind index <space> sidebar-open
 bind index <Esc>S sidebar-toggle
+bind index t tag-thread
 
 set index_format="%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s %* [%g]"
 set pager_format="-%Z- %C/%m: %-20.20n   %s%* [%g] (%P)"
 
+set pager_index_lines=7
+
 # virtual folders
 virtual-mailboxes \
-    "INBOX"                "notmuch://?query=tag:inbox and NOT tag:archive" \
-    "pinky"                "notmuch://?query=tag:pinky and NOT tag:archive" \
-    " pinky      [archive]" "notmuch://?query=tag:pinky and tag:archive" \
-    "Bugs"                 "notmuch://?query=tag:bug NOT tag:archive" \
-    "RH"                   "notmuch://?query=tag:rh and NOT tag:archive" \
-    "Fedora"               "notmuch://?query=tag:fed and NOT tag:archive" \
-    "Linux"                "notmuch://?query=tag:lk and NOT tag:archive" \
-    "NFS"                  "notmuch://?query=tag:nfs and NOT tag:archive" \
-    "Filesystems"          "notmuch://?query=tag:fs and NOT tag:archive" \
-    "Security"             "notmuch://?query=tag:sec" \
-    "Partitioning"         "notmuch://?query=tag:part" \
-    "GNU"                  "notmuch://?query=tag:gnu" \
-    "udev"                 "notmuch://?query=tag:udev" \
-    "initrd"               "notmuch://?query=tag:initrd" \
-    "Linux CZ"             "notmuch://?query=tag:cz" \
-    "Notmuch"              "notmuch://?query=tag:nm" \
-    "Procps"               "notmuch://?query=tag:proc" \
-    " Util-linux  [archive]" "notmuch://?query=tag:ul and tag:archive" \
-    " Bugs        [archive]" "notmuch://?query=tag:bug and tag:archive" \
-    " RH          [archive]" "notmuch://?query=tag:rh and tag:archive" \
-    " Fedora      [archive]" "notmuch://?query=tag:fed and tag:archive" \
-    " Linux       [archive]" "notmuch://?query=tag:lk and tag:archive" \
-    " Filesystems [archive]" "notmuch://?query=tag:fs and tag:archive" \
+    "inbox"             "notmuch://?query=tag:inbox and NOT tag:archive and not tag:spam" \
+    " inbox  [archive]" "notmuch://?query=tag:inbox and tag:archive and not tag:spam"
 
-macro index A "<modify-labels-then-hide>+archive -inbox\n<sync-mailbox>"
-macro index I "<modify-labels-then-hide>-inbox\n<sync-mailbox>"
+set my_vbox_file=~/.mutt/virtual_mailboxes
+source $my_vbox_file
+
+macro index  "<enter-command>unset wait_key<enter><shell-escape>mutt_nm_tags.sh<enter><enter-command>source $my_vbox_file<enter><enter-command>set sidebar_visible=no<enter><enter-command>set sidebar_visible=yes<enter>"
+
+macro index A "<tag-prefix><modify-labels-then-hide>+archive -inbox\n<sync-mailbox>"
+macro index I "<tag-prefix><modify-labels>"
 
 # mark emails for git-am
 # (e.g. "git am -i -3 $(notmuch search --output=files tag:PATCH)"
 #
-macro index P "<modify-labels>PATCH\n"
-macro index <Esc>P "<modify-labels>-PATCH\n"
+#macro index P "<modify-labels>PATCH\n"
+#macro index <Esc>P "<modify-labels>-PATCH\n"

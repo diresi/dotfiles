@@ -1,11 +1,13 @@
 # This is the default filter chain
 [SpamFilter]
-[ClassifyingFilter]
+#[ClassifyingFilter]
 [KillThreadsFilter]
 [ListMailsFilter]
 [ArchiveSentMailsFilter]
 [InboxFilter]
 [FolderNameFilter]
+maildir_separator=/
+folder_transforms=Sent:sent Trash:trash Spamverdacht:spamverdacht
 
 [MailMover]
 folders = INBOX Junk
